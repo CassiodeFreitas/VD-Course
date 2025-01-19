@@ -28,4 +28,3 @@ tolerance=1e-6;
 signalf(abs(signalf)<tolerance)=0;
 phase(2:(N/2))=angle(signalf(2:(N/2))/N)';
 end
-
