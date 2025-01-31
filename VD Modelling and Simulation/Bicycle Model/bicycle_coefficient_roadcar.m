@@ -1,7 +1,6 @@
 %% Constants
 % Gravity
 g = 9.81;
-addpath(genpath('C:\Users\cassi\Documents\VD-Course'));
 
 %% Setup
 V = 120; %kph

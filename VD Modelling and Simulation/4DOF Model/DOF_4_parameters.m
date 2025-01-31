@@ -1,7 +1,7 @@
 clc
 clear all
 
-%% TO DO
+%% TO DO 
 % Create surface characterisation distance based;
 
 %% Constants

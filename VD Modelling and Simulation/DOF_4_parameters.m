@@ -1,5 +1,6 @@
 clc
 clear all
+addpath(genpath('C:\Users\cassi\Documents\VD-Course'));
 
 %% TO DO 
 % Create surface characterisation distance based;

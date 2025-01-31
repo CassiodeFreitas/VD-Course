@@ -1,6 +1,5 @@
 clc
 clear all
-addpath(genpath('C:\Users\cassi\Documents\VD-Course'));
 
 %% Constants
 % Gravity [m/s^2]

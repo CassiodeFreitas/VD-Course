@@ -1,6 +1,5 @@
 clc
 clear all
-addpath(genpath('C:\Users\cassi\Documents\VD-Course'));
 
 %% Choose Car & Load Parameters into Workspace
 car_type = questdlg('Which car would you like to use?','Choose Car','Formula Car','Road Car','None');

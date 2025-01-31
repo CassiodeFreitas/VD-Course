@@ -81,3 +81,6 @@ EF = -2.5276;
 % Peak Value
 a1F = -1e-5;
 a2F = 1.25;
+
+%% Run Simulation
+sim('driving_dynamics',3)

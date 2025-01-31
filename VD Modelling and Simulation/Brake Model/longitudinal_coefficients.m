@@ -1,3 +1,7 @@
+clc
+clear all
+addpath(genpath('C:\Users\cassi\Documents\VD-Course'));
+
 %% Constants
 g = 9.81;
 
@@ -29,7 +33,8 @@ B = 4.1576;
 E = -22.1100;
 a1 = -1e-5;
 a2 = 1.25;
-
+ 
+%% Run Simulation
 sim('brake_model',3)
 figure(1)
 plot(longacc)
