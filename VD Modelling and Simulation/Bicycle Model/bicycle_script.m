@@ -52,10 +52,10 @@ FzR = unique(FzR.data);
 Kus = SWA.data./(latacc.data*SR)-180*L/(pi()*(V/3.6)^2);
 if mean(Kus) < 0
     balance = 'oversteer';
-%     Vcrit = 3.6 * sqrt(g*L/abs(Kus.data));
+    %     Vcrit = 3.6 * sqrt(g*L/abs(Kus.data));
 else
     balance = 'understeer';
-%     Vchar = 3.6 * sqrt(g*L/Kus.data);
+    %     Vchar = 3.6 * sqrt(g*L/Kus.data);
 end
 
 %% Save Parameters
@@ -67,145 +67,159 @@ end
 
 %% Ramp Input Plot Figures
 if input == 1
-% figure(1)
-% subplot(2,3,1)
-% plot(X.data,Y.data,line,'DisplayName',car_type)
-% xlabel('X [m]')
-% ylabel('Y [m]')
-% lgd = legend;
-% hold on
-% subplot(2,3,2)
-% plot(yawrate.time,yawrate.data,line,'DisplayName',car_type)
-% xlabel('Time [s]')
-% ylabel('Yaw Rate [deg/s]')
-% lgd = legend;
-% hold on
-% subplot(2,3,3)
-% plot(sideslip.time,sideslip.data,line,'DisplayName',car_type)
-% xlabel('Time [s]')
-% ylabel('Sideslip (Attitude) [deg]')
-% lgd = legend;
-% hold on
-% subplot(2,3,4)
-% plot(latacc.time,latacc.data,line,'DisplayName',car_type)
-% xlabel('Time [s]')
-% ylabel('Lateral Acceleration [m/s^2]')
-% lgd = legend;
-% hold on
-% subplot(2,3,5)
-% plot(SWA.time,SWA.data,line,'DisplayName',car_type)
-% xlabel('Time [s]')
-% ylabel('Steering Wheel Angle [deg]')
-% lgd = legend;
-% hold on
-% 
-% figure(2)
-% subplot(2,2,1)
-% plot(X.data,Y.data,line,'DisplayName',car_type)
-% xlabel('X [m]')
-% ylabel('Y [m]')
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,2,2)
-% plot(SWA.data,latacc.data,line,'DisplayName',car_type)
-% xlabel('Steering Angle [deg]')
-% ylabel('Lateral Acceleration [m/s^2]')
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,2,3)
-% plot(sideslip.data,latacc.data,line,'DisplayName',car_type)
-% xlabel('Side Slip (Attitude) [deg]')
-% ylabel('Lateral Acceleration [m/s^2]')
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,2,4)
-% plot(sideslip.time,Kus,line,'DisplayName',car_type)
-% xlabel('Time [s]')
-% ylabel('US Gradient [m/(s^2*deg)]')
-% lgd = legend;
-% grid on
-% hold on
-% 
-% figure(3)
-% subplot(2,1,1)
-% plot(SAF.time,SAF.data,line,'DisplayName',car_type)
-% xlabel('Time [m]')
-% ylabel('Slip Angle Front [deg]')
-% ylim([-11 0])
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,1,2)
-% plot(SAR.time,SAR.data,line,'DisplayName',car_type)
-% xlabel('Time [m]')
-% ylabel('Slip Angle Rear [deg]')
-% ylim([-11 0])
-% lgd = legend;
-% grid on
-% hold on
-% 
-% 
-% figure(4)
-% subplot(2,2,1)
-% plot(SAF.data,FyF.data,line,'DisplayName',car_type)
-% xlabel('Slip Angle Front [deg]')
-% xlim([-11 0])
-% ylim([0 8500])
-% ylabel('Lateral Force Front [N]')
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,2,2)
-% plot(SAF.data,FyFC,line,'DisplayName',car_type)
-% xlabel('Slip Angle Front [deg]')
-% ylabel('Lateral Force Coefficient Front [N/N]')
-% xlim([-11 0])
-% ylim([0 1.3])
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,2,3)
-% plot(SAR.data,FyR.data,line,'DisplayName',car_type)
-% xlabel('Slip Angle Rear [deg]')
-% ylabel('Lateral Force Rear [N]')
-% xlim([-8 0])
-% ylim([0 8500])
-% lgd = legend;
-% grid on
-% hold on
-% subplot(2,2,4)
-% plot(SAR.data,FyRC,line,'DisplayName',car_type)
-% xlabel('Slip Angle Rear [deg]')
-% ylabel('Lateral Force Coefficient Rear [N/N]')
-% xlim([-8 0])
-% ylim([0 1.3])
-% lgd = legend;
-% grid on
-% hold on
+
+    tg = uitabgroup;
+
+    tab1 = uitab(tg,'Title','Figure 1')
+    axes('Parent',tab1)
+    subplot(2,3,1)
+    plot(X.data,Y.data,line,'DisplayName',car_type)
+    xlabel('X [m]')
+    ylabel('Y [m]')
+    lgd = legend;
+    hold on
+    subplot(2,3,2)
+    plot(yawrate.time,yawrate.data,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('Yaw Rate [deg/s]')
+    lgd = legend;
+    hold on
+    subplot(2,3,3)
+    plot(sideslip.time,sideslip.data,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('Sideslip (Attitude) [deg]')
+    lgd = legend;
+    hold on
+    subplot(2,3,4)
+    plot(latacc.time,latacc.data,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('Lateral Acceleration [m/s^2]')
+    lgd = legend;
+    hold on
+    subplot(2,3,5)
+    plot(SWA.time,SWA.data,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('Steering Wheel Angle [deg]')
+    lgd = legend;
+    hold on
+
+    tab2 = uitab(tg,'Title','Figure 2')
+    axes('Parent',tab2)
+    subplot(2,2,1)
+    plot(X.data,Y.data,line,'DisplayName',car_type)
+    xlabel('X [m]')
+    ylabel('Y [m]')
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,2,2)
+    plot(SWA.data,latacc.data,line,'DisplayName',car_type)
+    xlabel('Steering Angle [deg]')
+    ylabel('Lateral Acceleration [m/s^2]')
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,2,3)
+    plot(sideslip.data,latacc.data,line,'DisplayName',car_type)
+    xlabel('Side Slip (Attitude) [deg]')
+    ylabel('Lateral Acceleration [m/s^2]')
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,2,4)
+    plot(sideslip.time,Kus,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('US Gradient [m/(s^2*deg)]')
+    lgd = legend;
+    grid on
+    hold on
+
+    tab3 = uitab(tg,'Title','Figure 3')
+    axes('Parent',tab3)
+    subplot(2,1,1)
+    plot(SAF.time,SAF.data,line,'DisplayName',car_type)
+    xlabel('Time [m]')
+    ylabel('Slip Angle Front [deg]')
+    ylim([-11 0])
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,1,2)
+    plot(SAR.time,SAR.data,line,'DisplayName',car_type)
+    xlabel('Time [m]')
+    ylabel('Slip Angle Rear [deg]')
+    ylim([-11 0])
+    lgd = legend;
+    grid on
+    hold on
+
+
+    tab4 = uitab(tg,'Title','Figure 4')
+    axes('Parent',tab4)
+    subplot(2,2,1)
+    plot(SAF.data,FyF.data,line,'DisplayName',car_type)
+    xlabel('Slip Angle Front [deg]')
+    xlim([-11 0])
+    ylim([0 8500])
+    ylabel('Lateral Force Front [N]')
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,2,2)
+    plot(SAF.data,FyFC,line,'DisplayName',car_type)
+    xlabel('Slip Angle Front [deg]')
+    ylabel('Lateral Force Coefficient Front [N/N]')
+    xlim([-11 0])
+    ylim([0 1.3])
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,2,3)
+    plot(SAR.data,FyR.data,line,'DisplayName',car_type)
+    xlabel('Slip Angle Rear [deg]')
+    ylabel('Lateral Force Rear [N]')
+    xlim([-8 0])
+    ylim([0 8500])
+    lgd = legend;
+    grid on
+    hold on
+    subplot(2,2,4)
+    plot(SAR.data,FyRC,line,'DisplayName',car_type)
+    xlabel('Slip Angle Rear [deg]')
+    ylabel('Lateral Force Coefficient Rear [N/N]')
+    xlim([-8 0])
+    ylim([0 1.3])
+    lgd = legend;
+    grid on
+    hold on
 
 else
-%% Step Input Plot Figures
-figure(1)
-plot(latacc.time,latacc.data,line,'DisplayName',car_type)
-xlabel('Time [s]')
-ylabel('Lateral Acceleration [m/s^2]')
-% xlim([-8 0])
-% ylim([0 1.3])
-lgd = legend;
-grid on
-hold on
+    %% Step Input Plot Figures
 
-figure(2)
-plot(yawrate.time,yawrate.data,line,'DisplayName',car_type)
-xlabel('Time [s]')
-ylabel('Yaw Rate [deg/s]')
-% xlim([-8 0])
-% ylim([0 1.3])
-lgd = legend;
-grid on
-hold on
+    tg = uitabgroup;
+
+    tab1 = uitab(tg,'Title','Figure 1')
+    axes('Parent',tab1)
+
+    plot(latacc.time,latacc.data,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('Lateral Acceleration [m/s^2]')
+    % xlim([-8 0])
+    % ylim([0 1.3])
+    lgd = legend;
+    grid on
+    hold on
+
+    tab2 = uitab(tg,'Title','Figure 2')
+    axes('Parent',tab2)
+
+    plot(yawrate.time,yawrate.data,line,'DisplayName',car_type)
+    xlabel('Time [s]')
+    ylabel('Yaw Rate [deg/s]')
+    % xlim([-8 0])
+    % ylim([0 1.3])
+    lgd = legend;
+    grid on
+    hold on
 
 end
