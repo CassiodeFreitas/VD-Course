@@ -1,82 +1,81 @@
 clc
 clear all
 try
-%% Choose Car & Load Parameters into Workspace
-car_type = questdlg('Which car would you like to use?','Choose Car','Formula Car','Road Car','None');
-switch car_type
-    case "Formula Car"
-        bicycle_coefficient_formula
-        load('formulacar_params.mat')
-        car_type = "Formula Car";
-    case "Road Car"
-        bicycle_coefficient_roadcar
-        load('roadcar_params.mat')
-        car_type = "Road Car";
-end
+    %% Choose Car & Load Parameters into Workspace
+    car_type = questdlg('Which car would you like to use?','Choose Car','Formula Car','Road Car','None');
+    switch car_type
+        case "Formula Car"
+            bicycle_coefficient_formula
+            load('formulacar_params.mat')
+            car_type = "Formula Car";
+        case "Road Car"
+            bicycle_coefficient_roadcar
+            load('roadcar_params.mat')
+            car_type = "Road Car";
+    end
 
-%% Setup
-input = questdlg('Which steering wheel input would you like to apply?','Choose Input','Step Input','Ramp','None');
-switch input
-    case "Step Input"
-        input = 0;
-        simulation_time = 10;
-    case "Ramp"
-        input = 1;
-end
+    %% Setup
+    input = questdlg('Which steering wheel input would you like to apply?','Choose Input','Step Input','Ramp','None');
+    switch input
+        case "Step Input"
+            input = 0;
+            simulation_time = 10;
+        case "Ramp"
+            input = 1;
+    end
 
-% Modify Parameters
-% simulation_time = 100;
-% slope = 1; %deg/s
-% line = 'green--';
-% SA = 10;
-% V = 90;
-% L = 3.5;
-% a = 2;
-% b = L-a;
-% a1F = -1e-5;
-% a1R = -1e-5;
-% CF = 1.7631;
-% BF = 0.3609;
-% EF = -1.989;
+    % Modify Parameters
+    % simulation_time = 100;
+    % slope = 1; %deg/s
+    % line = 'green--';
+    % SA = 10;
+    % V = 90;
+    % L = 3.5;
+    % a = 2;
+    % b = L-a;
+    % a1F = -1e-5;
+    % a1R = -1e-5;
+    % CF = 1.7631;
+    % BF = 0.3609;
+    % EF = -1.989;
 
-%% Run Bicycle Model
-sim('bicycle_model.slx',simulation_time)
-%% Post Simulation Results
-mF = m*b/L;
-mR = m*a/L;
-CsF = FyF/SAF;
-CsR = FyR/SAR;
-FyFC = FyF.data./FzF.data;
-FyRC = FyR.data./FzR.data;
-FzF = unique(FzF.data);
-FzR = unique(FzR.data);
-% Kus = mF./CsF.data-mR./CsR.data; %For linear tyre models!
-Kus = (SWA.data./(latacc.data*SR))-(180*L/(pi()*(V/3.6)^2));
-if mean(Kus) < 0
-    balance = 'oversteer';
-    %     Vcrit = 3.6 * sqrt(g*L/abs(Kus.data));
-else
-    balance = 'understeer';
-    %     Vchar = 3.6 * sqrt(g*L/Kus.data);
-end
+    %% Run Bicycle Model
+    sim('bicycle_model.slx',simulation_time)
+    %% Post Simulation Results
+    mF = m*b/L;
+    mR = m*a/L;
+    CsF = FyF/SAF;
+    CsR = FyR/SAR;
+    FyFC = FyF.data./FzF.data;
+    FyRC = FyR.data./FzR.data;
+    FzF = unique(FzF.data);
+    FzR = unique(FzR.data);
+    % Kus = mF./CsF.data-mR./CsR.data; %For linear tyre models!
+    Kus = (SWA.data./(latacc.data*SR))-(180*L/(pi()*(V/3.6)^2));
+    if mean(Kus) < 0
+        balance = 'oversteer';
+        %     Vcrit = 3.6 * sqrt(g*L/abs(Kus.data));
+    else
+        balance = 'understeer';
+        %     Vchar = 3.6 * sqrt(g*L/Kus.data);
+    end
 
-%% Save Parameters
-if car_type == "Formula Car"
-    save('formulacar_params.mat')
-else
-    save('roadcar_params.mat')
-end
+    %% Save Parameters
+    if car_type == "Formula Car"
+        save('formulacar_params.mat')
+    else
+        save('roadcar_params.mat')
+    end
 
-%% Run Pacejka Model
-sim('pacejka_lateral_model.slx',10)
+    %% Run Pacejka Model
+    sim('pacejka_lateral_model.slx',10)
 
-%% Post Simulation Results
-FyFC_Tyres = FyF_Tyres.data./FzF;
-FyRC_Tyres = FyR_Tyres.data./FzR;
-% FzF = unique(FzF.data);
-% FzR = unique(FzR.data);
-%% Ramp Input Plot Figures
-if input == 1
+    %% Post Simulation Results
+    FyFC_Tyres = FyF_Tyres.data./FzF;
+    FyRC_Tyres = FyR_Tyres.data./FzR;
+    % FzF = unique(FzF.data);
+    % FzR = unique(FzR.data);
+    %% Plot Figures
     set(0,'DefaultFigureWindowStyle','docked');
     figure(1)
     subplot(2,3,1)
@@ -231,31 +230,6 @@ if input == 1
     lgd = legend;
     grid on
     hold on
-
-else
-    %% Step Input Plot Figures
-    set(0,'DefaultFigureWindowStyle','docked');
-    figure(1)
-    plot(latacc.time,latacc.data,line,'DisplayName',car_type)
-    xlabel('Time [s]')
-    ylabel('Lateral Acceleration [m/s^2]')
-    % xlim([-8 0])
-    % ylim([0 1.3])
-    lgd = legend;
-    grid on
-    hold on
-
-    figure(2)
-    plot(yawrate.time,yawrate.data,line,'DisplayName',car_type)
-    xlabel('Time [s]')
-    ylabel('Yaw Rate [deg/s]')
-    % xlim([-8 0])
-    % ylim([0 1.3])
-    lgd = legend;
-    grid on
-    hold on
-
-end
 
 catch ME
     message = getReport(ME);
