@@ -19,31 +19,31 @@ try
     switch input
         case "Step Input"
             input = 0;
-            simulation_time = 10;
+            simulation_time = 20;
         case "Ramp"
             input = 1;
     end
 
     try
-    % Modify Parameters
-    prompt = {'Simulation Time:', 'Slope:', 'Line:', 'SA:', 'V:', 'L:', 'a:', 'a1F:', 'a1R:', 'CF:', 'BF:', 'EF:'};
-    dlgtitle = 'Would you like to modify any parameters?';
-    definput = {'20','2', 'blue--', '11', '120', '3.5', '1.8', '-1e-5', '-1e-5', '1.8391', '0.2719', '-2.5276'};
-    fieldsize = [1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45];
-    answer = inputdlg(prompt,dlgtitle,fieldsize,definput);
-    simulation_time = str2double(answer{1});
-    slope = str2double(answer{2}); %deg/s
-    line = answer{3};
-    SA = str2double(answer{4});
-    V = str2double(answer{5});
-    L = str2double(answer{6});
-    a = str2double(answer{7});
-    b = L-a;
-    a1F = str2double(answer{8});
-    a1R = str2double(answer{9});
-    CF = str2double(answer{10});
-    BF = str2double(answer{11});
-    EF = str2double(answer{12});
+        % Modify Parameters
+        prompt = {'Simulation Time:', 'Slope:', 'Line:', 'SA:', 'V:', 'L:', 'a:', 'a1F:', 'a1R:', 'CF:', 'BF:', 'EF:'};
+        dlgtitle = 'Would you like to modify any parameters?';
+        definput = {'20','2', 'red', '11', '120', '3.5', '1.8', '-1e-5', '-1e-5', '1.8391', '0.2719', '-2.5276'};
+        fieldsize = [1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45];
+        answer = inputdlg(prompt,dlgtitle,fieldsize,definput);
+        simulation_time = str2double(answer{1});
+        slope = str2double(answer{2}); %deg/s
+        line = answer{3};
+        SA = str2double(answer{4});
+        V = str2double(answer{5});
+        L = str2double(answer{6});
+        a = str2double(answer{7});
+        b = L-a;
+        a1F = str2double(answer{8});
+        a1R = str2double(answer{9});
+        CF = str2double(answer{10});
+        BF = str2double(answer{11});
+        EF = str2double(answer{12});
     catch
     end
 
@@ -60,14 +60,15 @@ try
     FzR = unique(FzR.data);
     % Kus = mF./CsF.data-mR./CsR.data; %For linear tyre models!
     Kus = (SWA.data./(latacc.data*SR))-(180*L/(pi()*(V/3.6)^2));
-    if mean(Kus) < 0
+    if mean(Kus(~isnan(Kus))) < 0
         balance = 'oversteer';
-        %     Vcrit = 3.6 * sqrt(g*L/abs(Kus.data));
+        Vcrit = 3.6 * sqrt(g*L/abs(mean(Kus(~isnan(Kus)))));
+        fprintf("The car's balance is %s a its critical speed is %f. \n",balance, Vcrit)
     else
         balance = 'understeer';
-        %     Vchar = 3.6 * sqrt(g*L/Kus.data);
+        Vchar = 3.6 * sqrt(g*L/abs(mean(Kus(~isnan(Kus)))));
+        fprintf("The car's balance is %s a its characteristic speed is %f. \n",balance, Vchar)
     end
-
     %% Save Parameters
     if car_type == "Formula Car"
         save('formulacar_params.mat')
