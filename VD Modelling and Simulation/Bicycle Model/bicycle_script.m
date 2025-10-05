@@ -1,6 +1,6 @@
 clc
 clear all
-
+try
 %% Choose Car & Load Parameters into Workspace
 car_type = questdlg('Which car would you like to use?','Choose Car','Formula Car','Road Car','None');
 switch car_type
@@ -33,6 +33,8 @@ end
 % L = 3.5;
 % a = 2;
 % b = L-a;
+% a1F = -1e-5;
+% a1R = -1e-5;
 % CF = 1.7631;
 % BF = 0.3609;
 % EF = -1.989;
@@ -147,7 +149,7 @@ if input == 1
     plot(SAF.time,SAF.data,line,'DisplayName',car_type)
     xlabel('Time [m]')
     ylabel('Slip Angle Front [deg]')
-    ylim([-11 0])
+    % ylim([-11 0])
     lgd = legend;
     grid on
     hold on
@@ -155,7 +157,7 @@ if input == 1
     plot(SAR.time,SAR.data,line,'DisplayName',car_type)
     xlabel('Time [m]')
     ylabel('Slip Angle Rear [deg]')
-    ylim([-11 0])
+    % ylim([-11 0])
     lgd = legend;
     grid on
     hold on
@@ -165,8 +167,8 @@ if input == 1
     subplot(2,2,1)
     plot(SAF.data,FyF.data,line,'DisplayName',car_type)
     xlabel('Slip Angle Front [deg]')
-    xlim([-11 0])
-    ylim([0 8500])
+    % xlim([-11 0])
+    % ylim([0 8500])
     ylabel('Lateral Force Front [N]')
     lgd = legend;
     grid on
@@ -175,8 +177,8 @@ if input == 1
     plot(SAF.data,FyFC,line,'DisplayName',car_type)
     xlabel('Slip Angle Front [deg]')
     ylabel('Lateral Force Coefficient Front [N/N]')
-    xlim([-11 0])
-    ylim([0 1.3])
+    % xlim([-11 0])
+    % ylim([0 1.3])
     lgd = legend;
     grid on
     hold on
@@ -184,8 +186,8 @@ if input == 1
     plot(SAR.data,FyR.data,line,'DisplayName',car_type)
     xlabel('Slip Angle Rear [deg]')
     ylabel('Lateral Force Rear [N]')
-    xlim([-8 0])
-    ylim([0 8500])
+    % xlim([-8 0])
+    % ylim([0 8500])
     lgd = legend;
     grid on
     hold on
@@ -193,8 +195,8 @@ if input == 1
     plot(SAR.data,FyRC,line,'DisplayName',car_type)
     xlabel('Slip Angle Rear [deg]')
     ylabel('Lateral Force Coefficient Rear [N/N]')
-    xlim([-8 0])
-    ylim([0 1.3])
+    % xlim([-8 0])
+    % ylim([0 1.3])
     lgd = legend;
     grid on
     hold on
@@ -253,4 +255,9 @@ else
     grid on
     hold on
 
+end
+
+catch ME
+    message = getReport(ME);
+    errordlg(message)
 end

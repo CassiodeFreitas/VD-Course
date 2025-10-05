@@ -6,7 +6,7 @@ clear all
 % switch answer
 %     case "Formula Car"
 %         bicycle_coefficient_formula
-        load('formulacar_params.mat')
+load('formulacar_params.mat')
 %         answer = "Formula Car";
 %     case "Road Car"
 %         bicycle_coefficient_roadcar
@@ -15,7 +15,7 @@ clear all
 % end
 %% Modify Parameters
 % SA = 10;
-V = 120;
+% V = 120;
 % L = 3.5;
 % a = 1.9;
 % b = L-a;
@@ -23,14 +23,12 @@ V = 120;
 % BF = 0.3609;
 % EF = -1.989;
 %% Run Simulink Model
-FzF = 4.463323015873017e+03;
-FzR = 4.725871428571430e+03;
+% FzF = unique(FzF.data);
+% FzR = unique(FzR.data);
 sim('pacejka_lateral_model.slx',10)
 %% Post Simulation Results
-FyFC = FyF.data./FzF.data;
-FyRC = FyR.data./FzR.data;
-FzF = unique(FzF.data);
-FzR = unique(FzR.data);
+FyFC_Tyres = FyF_Tyres.data./FzF;
+FyRC_Tyres = FyR_Tyres.data./FzR;
 %% Generate Plots
 % figure(1)
 % subplot(2,2,1)
@@ -62,33 +60,34 @@ FzR = unique(FzR.data);
 % xlabel('Slip Angle [deg]')
 % ylabel('Lateral Force Coefficient [N/N]')
 
-figure(6)
+figure(5)
 subplot(2,2,1)
-plot(SAF.data,FyF.data,line,'DisplayName',car_type)
-legend(strcat("FzF = ",num2str(FzF(1))));
+plot(SAF_Tyres.data,FyF_Tyres.data,line,'DisplayName',strcat("FzF = ",num2str(FzF(1))))
 xlabel('Slip Angle Front [deg]')
 ylabel('Lateral Force Front [N]')
+lgd = legend;
 grid on
 hold on
 subplot(2,2,2)
-plot(SAF.data,FyFC,line,'DisplayName',car_type)
+plot(SAF_Tyres.data,FyFC_Tyres,line,'DisplayName',strcat("FzF = ",num2str(FzF(1))))
 legend(strcat("FzF = ",num2str(FzF(1))));
 xlabel('Slip Angle Front[deg]')
 ylabel('Lateral Force Coefficient Front [N/N]')
+lgd = legend;
 grid on
 hold on
 subplot(2,2,3)
-plot(SAR.data,FyR.data,line,'DisplayName',car_type)
-legend(strcat("FzR = ",num2str(FzR(1))));
+plot(SAR_Tyres.data,FyR_Tyres.data,line,'DisplayName',strcat("FzR = ",num2str(FzR(1))))
 xlabel('Slip Angle Rear [deg]')
 ylabel('Lateral Force Rear [N]')
+lgd = legend;
 grid on
 hold on
 subplot(2,2,4)
-plot(SAR.data,FyRC,line,'DisplayName',car_type)
-legend(strcat("FzR = ",num2str(FzR(1))));
+plot(SAR_Tyres.data,FyRC_Tyres,line,'DisplayName',strcat("FzR = ",num2str(FzR(1))))
 xlabel('Slip Angle Rear [deg]')
 ylabel('Lateral Force Coefficient Rear [N/N]')
+lgd = legend;
 grid on
 hold on
 %% Save Parameters
