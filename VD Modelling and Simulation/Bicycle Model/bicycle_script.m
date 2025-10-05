@@ -27,8 +27,8 @@ end
 % Modify Parameters
 % simulation_time = 100;
 % slope = 1; %deg/s
-line = 'green--';
-SA = 10;
+% line = 'green--';
+% SA = 10;
 % V = 90;
 % L = 3.5;
 % a = 2;
@@ -49,7 +49,7 @@ FyRC = FyR.data./FzR.data;
 FzF = unique(FzF.data);
 FzR = unique(FzR.data);
 % Kus = mF./CsF.data-mR./CsR.data; %For linear tyre models!
-Kus = SWA.data./(latacc.data*SR)-180*L/(pi()*(V/3.6)^2);
+Kus = (SWA.data./(latacc.data*SR))-(180*L/(pi()*(V/3.6)^2));
 if mean(Kus) < 0
     balance = 'oversteer';
     %     Vcrit = 3.6 * sqrt(g*L/abs(Kus.data));
@@ -73,6 +73,8 @@ if input == 1
     plot(X.data,Y.data,line,'DisplayName',car_type)
     xlabel('X [m]')
     ylabel('Y [m]')
+    xlim([-max(max(abs(X.data),abs(Y.data))) max(max(abs(X.data),abs(Y.data)))])
+    ylim([-max(max(abs(X.data),abs(Y.data))) max(max(abs(X.data),abs(Y.data)))])
     lgd = legend;
     hold on
     subplot(2,3,2)
@@ -105,6 +107,8 @@ if input == 1
     plot(X.data,Y.data,line,'DisplayName',car_type)
     xlabel('X [m]')
     ylabel('Y [m]')
+    xlim([-max(max(abs(X.data),abs(Y.data))) max(max(abs(X.data),abs(Y.data)))])
+    ylim([-max(max(abs(X.data),abs(Y.data))) max(max(abs(X.data),abs(Y.data)))])
     lgd = legend;
     grid on
     hold on
@@ -125,7 +129,7 @@ if input == 1
     subplot(2,2,4)
     plot(sideslip.time,Kus,line,'DisplayName',car_type)
     xlabel('Time [s]')
-    ylabel('US Gradient [m/(s^2*deg)]')
+    ylabel('US Gradient [deg/(m/s^2)]')
     lgd = legend;
     grid on
     hold on
