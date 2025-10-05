@@ -28,7 +28,7 @@ try
     % Modify Parameters
     prompt = {'Simulation Time:', 'Slope:', 'Line:', 'SA:', 'V:', 'L:', 'a:', 'a1F:', 'a1R:', 'CF:', 'BF:', 'EF:'};
     dlgtitle = 'Would you like to modify any parameters?';
-    definput = {'20','2', 'blue--', '10', '12', '3.5', '1.8', '-1e-5', '-1e-5', '1.7631', '0.3609', '-1.989'};
+    definput = {'20','2', 'blue--', '11', '120', '3.5', '1.8', '-1e-5', '-1e-5', '1.8391', '0.2719', '-2.5276'};
     fieldsize = [1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45];
     answer = inputdlg(prompt,dlgtitle,fieldsize,definput);
     simulation_time = str2double(answer{1});
