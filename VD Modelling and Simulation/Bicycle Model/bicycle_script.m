@@ -24,20 +24,28 @@ try
             input = 1;
     end
 
+    try
     % Modify Parameters
-    % simulation_time = 100;
-    % slope = 1; %deg/s
-    % line = 'green--';
-    % SA = 10;
-    % V = 90;
-    % L = 3.5;
-    % a = 2;
-    % b = L-a;
-    % a1F = -1e-5;
-    % a1R = -1e-5;
-    % CF = 1.7631;
-    % BF = 0.3609;
-    % EF = -1.989;
+    prompt = {'Simulation Time:', 'Slope:', 'Line:', 'SA:', 'V:', 'L:', 'a:', 'a1F:', 'a1R:', 'CF:', 'BF:', 'EF:'};
+    dlgtitle = 'Would you like to modify any parameters?';
+    definput = {'20','2', 'blue--', '10', '12', '3.5', '1.8', '-1e-5', '-1e-5', '1.7631', '0.3609', '-1.989'};
+    fieldsize = [1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45; 1 45];
+    answer = inputdlg(prompt,dlgtitle,fieldsize,definput);
+    simulation_time = str2double(answer{1});
+    slope = str2double(answer{2}); %deg/s
+    line = answer{3};
+    SA = str2double(answer{4});
+    V = str2double(answer{5});
+    L = str2double(answer{6});
+    a = str2double(answer{7});
+    b = L-a;
+    a1F = str2double(answer{8});
+    a1R = str2double(answer{9});
+    CF = str2double(answer{10});
+    BF = str2double(answer{11});
+    EF = str2double(answer{12});
+    catch
+    end
 
     %% Run Bicycle Model
     sim('bicycle_model.slx',simulation_time)
@@ -210,7 +218,6 @@ try
     hold on
     subplot(2,2,2)
     plot(SAF_Tyres.data,FyFC_Tyres,line,'DisplayName',strcat("FzF = ",num2str(FzF(1))))
-    legend(strcat("FzF = ",num2str(FzF(1))));
     xlabel('Slip Angle Front[deg]')
     ylabel('Lateral Force Coefficient Front [N/N]')
     lgd = legend;
