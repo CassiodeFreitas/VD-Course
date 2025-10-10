@@ -1,6 +1,5 @@
 clc
 clear all
-addpath(genpath('C:\Users\cassi\Documents\VD-Course'));
 
 %% Constants
 % Gravity [m/s^2]
@@ -10,7 +9,7 @@ g = 9.81;
 % Sprung mass [kg]
 m_s = 400;
 % Unsprung Mass [kg]
-m_us = 30;
+m_us =  30;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_ride = 1.50 Hz)
@@ -27,15 +26,15 @@ k_tyre = 300000;
 z0_tyre = (m_s + m_us) * g / k_tyre;
 
 %% Run Simulation
-% z_r_type = questdlg('Which road input type would you like to apply?','Choose Road Input','Step Input','Chirp Input','Cancel');
-% switch z_r_type
-%     case "Step Input"
+z_r_type = questdlg('Which road input type would you like to apply?','Choose Road Input','Step Input','Chirp Input','Cancel');
+switch z_r_type
+    case "Step Input"
         z_r_type = 0;
         simulation_time = 5;
-%     case "Chirp Input"
-%         z_r_type = 1;
-%         simulation_time = 100;
-% end
+    case "Chirp Input"
+        z_r_type = 1;
+        simulation_time = 100;
+end
 sim('quarter_car_model.slx',simulation_time)
 
 %% Run FFT
@@ -121,4 +120,4 @@ lgd = legend;
 xlim([ 0 30])
 grid on
 
-% fprintf('z_us_dotdot = %f',z_us_dotdot.data(1))
+fprintf('z_us_dotdot = %f \n',z_us_dotdot.data(1))
