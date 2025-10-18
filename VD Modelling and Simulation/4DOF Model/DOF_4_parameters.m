@@ -5,7 +5,7 @@ clear all
 % Create surface characterisation distance based;
 
 %% Constants
-% Gravity [m/s^2]
+% Gravity [m/s^2]2
 constants.g = 9.81;
 
 %% Vehicle Parameters
@@ -14,28 +14,28 @@ chassis.L = 3.5;
 % CoG Position [m]
 chassis.a = 1.8;
 chassis.b = 1.7;
-% Sprung mass [kg]
-chassis.m_s = 850;
+% Total mass [kg]
+chassis.m = 850;
 % Unsprung Mass [kg]
 chassis.m_usF = 30;
 chassis.m_usR = 35;
-% Total mass [kg]
-chassis.m = chassis.m_s + chassis.m_usF + chassis.m_usR;
+% Sprung mass [kg]
+chassis.m_s = 850 - chassis.m_usF - chassis.m_usR;
 % Constant Velocity [m/s]
 chassis.V = 20;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
-suspension.k_springF = 146000;
-suspension.k_springR = 223000;
+suspension.k_springF = 135000;
+suspension.k_springR = 206000;
 % Spring Preload [N]
 % F0F = 4107.1 - 366.68715;
 suspension.F0F = chassis.m_s * (chassis.b / chassis.L) * constants.g;
 % F0R = 3593.7 + 317.69;
 suspension.F0R = chassis.m_s * (chassis.a / chassis.L) * constants.g;
 % Damping Coefficient [Ns/m] (c_ratio = 0.2)
-suspension.c_damperF = 3100;
-suspension.c_damperR = 4000;
+suspension.c_damperF = 2880;
+suspension.c_damperR = 3650;
 % Moment of Inertia [kg*m^2]
 chassis.I = 1350;
 
