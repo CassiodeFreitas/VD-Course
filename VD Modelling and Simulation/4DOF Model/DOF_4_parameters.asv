@@ -5,7 +5,7 @@ clear all
 % Create surface characterisation distance based;
 
 %% Constants
-% Gravity [m/s^2]
+% Gravity [m/s^2]2
 constants.g = 9.81;
 
 %% Vehicle Parameters
@@ -14,28 +14,28 @@ chassis.L = 3.5;
 % CoG Position [m]
 chassis.a = 1.8;
 chassis.b = 1.7;
-% Sprung mass [kg]
-chassis.m_s = 850;
+% Total mass [kg]
+chassis.m = 850;
 % Unsprung Mass [kg]
 chassis.m_usF = 30;
 chassis.m_usR = 35;
-% Total mass [kg]
-chassis.m = chassis.m_s + chassis.m_usF + chassis.m_usR;
+% Sprung mass [kg]
+chassis.m_s = 850 - chassis.m_usF - chassis.m_usR;
 % Constant Velocity [m/s]
 chassis.V = 20;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
-suspension.k_springF = 146000;
-suspension.k_springR = 223000;
+suspension.k_springF = 135000;
+suspension.k_springR = 206000;
 % Spring Preload [N]
 % F0F = 4107.1 - 366.68715;
 suspension.F0F = chassis.m_s * (chassis.b / chassis.L) * constants.g;
 % F0R = 3593.7 + 317.69;
 suspension.F0R = chassis.m_s * (chassis.a / chassis.L) * constants.g;
 % Damping Coefficient [Ns/m] (c_ratio = 0.2)
-suspension.c_damperF = 3100;
-suspension.c_damperR = 4000;
+suspension.c_damperF = 2880;
+suspension.c_damperR = 3650;
 % Moment of Inertia [kg*m^2]
 chassis.I = 1350;
 
@@ -51,7 +51,7 @@ suspension.z0_tyreR = (chassis.m_s * chassis.a / chassis.L + chassis.m_usF) * co
 % Simulation Time
 simulation_time = 5;
 % Step size [s]
-dt = 1e-3;
+dt = 5e-3;
 % Surface time [s]
 road.z_r_time = [0:dt:simulation_time];
 % Surface Data
@@ -83,37 +83,37 @@ switch z_r_type
         z_r_type = 1;
         simulation_time = 100;
 end
-simout = sim('DOF4_model_v2.slx',simulation_time);
+simout = sim('DOF4_v3_model.slx',simulation_time);
 
 %% Run FFT
 dt = 5e-3;
-[amp_s,phase_s,freq_s] = fft_VD(simout.z_s_dotdot.data,dt);
-[amp_usF,phase_usF,freq_usF] = fft_VD(simout.z_us_dotdotF.data,dt);
-[amp_usR,phase_usR,freq_usR] = fft_VD(simout.z_us_dotdotR.data,dt);
+[fft.amp_s,fft.phase_s,fft.freq_s] = fft_VD(simout.z_s_dotdot.data,dt);
+[fft.amp_usF,fft.phase_usF,fft.freq_usF] = fft_VD(simout.z_us_dotdotF.data,dt);
+[fft.amp_usR,fft.phase_usR,fft.freq_usR] = fft_VD(simout.z_us_dotdotR.data,dt);
 
 %% Post Simulation Results
 % Ride Frequency Front [Hz]
-f_rideF = (2*pi)^-1*(suspension.k_springF/(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
+postsim.f_rideF = (2*pi)^-1*(suspension.k_springF/(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
 % Wheel Hub Frequency Front [Hz]
-f_hubF = (2*pi)^-1*((suspension.k_tyreF+suspension.k_springF)/chassis.m_usF)^(1/2);
+postsim.f_hubF = (2*pi)^-1*((suspension.k_tyreF+suspension.k_springF)/chassis.m_usF)^(1/2);
 % Critical Damping Front [Ns/m]
-c_criticalF = 2*(suspension.k_springF*(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
+postsim.c_criticalF = 2*(suspension.k_springF*(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
 % Damping Ratio Front [-]
-c_ratioF = suspension.c_damperF/c_criticalF;
+postsim.c_ratioF = suspension.c_damperF/postsim.c_criticalF;
 
 % Ride Frequency Rear [Hz]
-f_rideR = (2*pi)^-1*(suspension.k_springR/(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
+postsim.f_rideR = (2*pi)^-1*(suspension.k_springR/(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
 % Wheel Hub Frequency Rear [Hz]
-f_hubR = (2*pi)^-1*((suspension.k_tyreR+suspension.k_springR)/chassis.m_usR)^(1/2);
+postsim.f_hubR = (2*pi)^-1*((suspension.k_tyreR+suspension.k_springR)/chassis.m_usR)^(1/2);
 % Critical Damping Rear [Ns/m]
-c_criticalR = 2*(suspension.k_springR*(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
+postsim.c_criticalR = 2*(suspension.k_springR*(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
 % Damping Ratio Rear [-]
-c_ratioR = suspension.c_damperR/c_criticalR;
+postsim.c_ratioR = suspension.c_damperR/postsim.c_criticalR;
 
 %% Plot Figures
 clf
 figure(1)
-tab1 = uitab("Title","Plots");1
+tab1 = uitab("Title","Plots");
 axes(tab1)
 subplot(3,2,1)
 plot(simout.z_s,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
@@ -189,15 +189,15 @@ ylim([-1.5e4 1.5e4])
 tab2 = uitab("Title","FFT");
 axes(tab2)
 subplot(1,1,1)
-plot(freq_s,amp_s,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
+plot(fft.freq_s,fft.amp_s,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
 hold on
-plot(freq_usF,amp_usF,'b','LineWidth',1.5,'DisplayName','Unsprung Mass Front')
-plot(freq_usR,amp_usR,'g','LineWidth',1.5,'DisplayName','Unsprung Mass Rear')
+plot(fft.freq_usF,fft.amp_usF,'b','LineWidth',1.5,'DisplayName','Unsprung Mass Front')
+plot(fft.freq_usR,fft.amp_usR,'g','LineWidth',1.5,'DisplayName','Unsprung Mass Rear')
 title('Sprung Mass Vertical Acceleration')
 xlabel('Frequency [Hz]')
 ylabel('Vertical Acceleration [m/s^2]')
 lgd = legend;
-xlim([ 0 30])
+xlim([ 0 50])
 grid on
 
 % fprintf('z_us_dotdot = %f /n',z_us_dotdot.data(1))

@@ -83,32 +83,32 @@ switch z_r_type
         z_r_type = 1;
         simulation_time = 100;
 end
-simout = sim('DOF4_model_v2.slx',simulation_time);
+simout = sim('DOF4_model_v3.slx',simulation_time);
 
 %% Run FFT
 dt = 5e-3;
-[amp_s,phase_s,freq_s] = fft_VD(simout.z_s_dotdot.data,dt);
-[amp_usF,phase_usF,freq_usF] = fft_VD(simout.z_us_dotdotF.data,dt);
-[amp_usR,phase_usR,freq_usR] = fft_VD(simout.z_us_dotdotR.data,dt);
+[fft.amp_s,fft.phase_s,fft.freq_s] = fft_VD(simout.z_s_dotdot.data,dt);
+[fft.amp_usF,fft.phase_usF,fft.freq_usF] = fft_VD(simout.z_us_dotdotF.data,dt);
+[fft.amp_usR,fft.phase_usR,fft.freq_usR] = fft_VD(simout.z_us_dotdotR.data,dt);
 
 %% Post Simulation Results
 % Ride Frequency Front [Hz]
-f_rideF = (2*pi)^-1*(suspension.k_springF/(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
+postsim.f_rideF = (2*pi)^-1*(suspension.k_springF/(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
 % Wheel Hub Frequency Front [Hz]
-f_hubF = (2*pi)^-1*((suspension.k_tyreF+suspension.k_springF)/chassis.m_usF)^(1/2);
+postsim.f_hubF = (2*pi)^-1*((suspension.k_tyreF+suspension.k_springF)/chassis.m_usF)^(1/2);
 % Critical Damping Front [Ns/m]
-c_criticalF = 2*(suspension.k_springF*(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
+postsim.c_criticalF = 2*(suspension.k_springF*(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
 % Damping Ratio Front [-]
-c_ratioF = suspension.c_damperF/c_criticalF;
+postsim.c_ratioF = suspension.c_damperF/postsim.c_criticalF;
 
 % Ride Frequency Rear [Hz]
-f_rideR = (2*pi)^-1*(suspension.k_springR/(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
+postsim.f_rideR = (2*pi)^-1*(suspension.k_springR/(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
 % Wheel Hub Frequency Rear [Hz]
-f_hubR = (2*pi)^-1*((suspension.k_tyreR+suspension.k_springR)/chassis.m_usR)^(1/2);
+postsim.f_hubR = (2*pi)^-1*((suspension.k_tyreR+suspension.k_springR)/chassis.m_usR)^(1/2);
 % Critical Damping Rear [Ns/m]
-c_criticalR = 2*(suspension.k_springR*(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
+postsim.c_criticalR = 2*(suspension.k_springR*(chassis.m_s * (chassis.a / chassis.L)))^(1/2);
 % Damping Ratio Rear [-]
-c_ratioR = suspension.c_damperR/c_criticalR;
+postsim.c_ratioR = suspension.c_damperR/postsim.c_criticalR;
 
 %% Plot Figures
 clf
@@ -189,10 +189,10 @@ ylim([-1.5e4 1.5e4])
 tab2 = uitab("Title","FFT");
 axes(tab2)
 subplot(1,1,1)
-plot(freq_s,amp_s,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
+plot(fft.freq_s,fft.amp_s,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
 hold on
-plot(freq_usF,amp_usF,'b','LineWidth',1.5,'DisplayName','Unsprung Mass Front')
-plot(freq_usR,amp_usR,'g','LineWidth',1.5,'DisplayName','Unsprung Mass Rear')
+plot(fft.freq_usF,fft.amp_usF,'b','LineWidth',1.5,'DisplayName','Unsprung Mass Front')
+plot(fft.freq_usR,fft.amp_usR,'g','LineWidth',1.5,'DisplayName','Unsprung Mass Rear')
 title('Sprung Mass Vertical Acceleration')
 xlabel('Frequency [Hz]')
 ylabel('Vertical Acceleration [m/s^2]')
