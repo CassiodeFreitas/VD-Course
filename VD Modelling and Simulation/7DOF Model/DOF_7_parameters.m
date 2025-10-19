@@ -41,7 +41,7 @@ chassis.hrcusR = r/2;
 % Constant Velocity [m/s]
 chassis.V = 20;
 % Constant Lateral Acceleration [m/s^2]
-chassis.ay = 0; %2;
+chassis.ay = 1; %2;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
