@@ -34,14 +34,14 @@ chassis.Ixx = 300;
 r = 0.375;
 % Roll Centre Height [m]
 chassis.hrcF = 0.04;
-chassis.hrcR = 0.05;
-chassis.hrcCoG = mean(chassis.hrcF + chassis.hrcR);
+chassis.hrcR = 0.06;
+chassis.hrcCoG = (chassis.hrcF + chassis.hrcR)/2;
 chassis.hrcusF = r/2;
 chassis.hrcusR = r/2;
 % Constant Velocity [m/s]
 chassis.V = 20;
 % Constant Lateral Acceleration [m/s^2]
-chassis.ay = 1; %2;
+chassis.ay = 0; %2;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
