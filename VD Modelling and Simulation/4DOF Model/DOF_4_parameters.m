@@ -45,7 +45,7 @@ suspension.k_tyreF = 400000;
 suspension.k_tyreR = suspension.k_tyreF;
 % Tyre Deflection @ Equilibrium
 suspension.z0_tyreF = (chassis.m_s * chassis.b / chassis.L + chassis.m_usF) * constants.g / suspension.k_tyreF;
-suspension.z0_tyreR = (chassis.m_s * chassis.a / chassis.L + chassis.m_usF) * constants.g / suspension.k_tyreR;
+suspension.z0_tyreR = (chassis.m_s * chassis.a / chassis.L + chassis.m_usR) * constants.g / suspension.k_tyreR;
 
 %% Surface Characterisation
 % Simulation Time

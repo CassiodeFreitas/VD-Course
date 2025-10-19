@@ -115,22 +115,23 @@ dt = 5e-3;
 [fft.amp_usR,fft.phase_usR,fft.freq_usR] = fft_VD(simout.gVertHubRL.data,dt);
 
 %% Post Simulation Results
-% Ride Frequency Front Left [Hz]
+% Ride Frequency Front [Hz]
 postsim.f_rideFL = (2*pi)^-1*(suspension.k_springFL/(chassis.m_s/2 * (chassis.b / chassis.L)))^(1/2);
-% Wheel Hub Frequency Front Left [Hz]
+% Wheel Hub Frequency Front [Hz]
 postsim.f_hubFL = (2*pi)^-1*((suspension.k_tyreFL+suspension.k_springFL)/chassis.m_usFL)^(1/2);
-% Critical Damping Front Left [Ns/m]
+% Critical Damping Front [Ns/m]
 postsim.c_criticalFL = 2*(suspension.k_springFL*(chassis.m_s/2 * (chassis.b / chassis.L)))^(1/2);
-% Damping Ratio Front Left [-]
+postsim.c_criticalF = 2*(suspension.k_springF*(chassis.m_s * (chassis.b / chassis.L)))^(1/2);
+% Damping Ratio Front [-]
 postsim.c_ratioFL = suspension.c_damperFL/postsim.c_criticalFL;
 
-% Ride Frequency Rear Left [Hz]
+% Ride Frequency Rear [Hz]
 postsim.f_rideRL = (2*pi)^-1*(suspension.k_springRL/(chassis.m_s/2 * (chassis.a / chassis.L)))^(1/2);
-% Wheel Hub Frequency Rear Left [Hz]
+% Wheel Hub Frequency Rear [Hz]
 postsim.f_hubRL = (2*pi)^-1*((suspension.k_tyreRL+suspension.k_springRL)/chassis.m_usRL)^(1/2);
-% Critical Damping Rear Left [Ns/m]
+% Critical Damping Rear [Ns/m]
 postsim.c_criticalRL = 2*(suspension.k_springRL*(chassis.m_s/2 * (chassis.a / chassis.L)))^(1/2);
-% Damping Ratio Rear Left [-]
+% Damping Ratio Rear [-]
 postsim.c_ratioRL = suspension.c_damperRL/postsim.c_criticalRL;
 
 %% Plot Figures
