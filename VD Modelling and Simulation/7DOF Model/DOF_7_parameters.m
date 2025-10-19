@@ -41,7 +41,7 @@ chassis.hrcusR = r/2;
 % Constant Velocity [m/s]
 chassis.V = 20;
 % Constant Lateral Acceleration [m/s^2]
-chassis.ay = 0; %2;
+chassis.ay = 1; %2;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
@@ -60,8 +60,8 @@ suspension.c_damperFR = suspension.c_damperFL;
 suspension.c_damperRL = 1825;
 suspension.c_damperRR = suspension.c_damperRL;
 % Anti Roll Bar Stiffness [Nm/rad]
-suspension.kARBf = 0; %5000;
-suspension.kARBr = 0; %1000;
+suspension.kARBf = 5000; %5000;
+suspension.kARBr = 1000; %1000;
 %% Tyre Parameters
 % Tyre Vertical Stiffness [N/m] (F_wheel_hub = 16.83 Hz)
 suspension.k_tyreFL = 200000;
