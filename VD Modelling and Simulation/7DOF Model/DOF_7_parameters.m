@@ -31,13 +31,17 @@ chassis.m_s = 850 - chassis.m_usFL - chassis.m_usFR - chassis.m_usRL- chassis.m_
 chassis.Iyy = 1350;
 chassis.Ixx = 300;
 % Tyre Nominal Radius [m]
+r = 0.375;
 % Roll Centre Height [m]
 chassis.hrcF = 0.04;
 chassis.hrcR = 0.05;
 chassis.hrcCoG = mean(chassis.hrcF + chassis.hrcR);
-r = 0.375;
+chassis.hrcusF = r/2;
+chassis.hrcusR = r/2;
 % Constant Velocity [m/s]
 chassis.V = 20;
+% Constant Lateral Acceleration [m/s^2]
+chassis.ay = 0; %2;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
@@ -56,8 +60,8 @@ suspension.c_damperFR = suspension.c_damperFL;
 suspension.c_damperRL = 1825;
 suspension.c_damperRR = suspension.c_damperRL;
 % Anti Roll Bar Stiffness [Nm/rad]
-suspension.kARBf = 5000;
-suspension.kARBr = 1000;
+suspension.kARBf = 0; %5000;
+suspension.kARBr = 0; %1000;
 %% Tyre Parameters
 % Tyre Vertical Stiffness [N/m] (F_wheel_hub = 16.83 Hz)
 suspension.k_tyreFL = 200000;
