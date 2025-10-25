@@ -41,8 +41,20 @@ chassis.hrcusR = r;
 % Constant Velocity [m/s]
 chassis.V = 20;
 % Constant Lateral Acceleration [m/s^2]
-chassis.ay = 4;
+chassis.ay = 0;
 
+%% Aero Parameters
+% Frontal Area [m^2]
+aero.Af = 1.25;
+% Drag Coefficient [-]
+aero.Cx = 0;
+% Downforce Coefficient [-]
+aero.Cz = 1;
+% Air Density [kg/m^3]
+aero.rho = 1.225;
+% Aero Balance
+aero.a = chassis.a;
+aero.b = chassis.b;
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
 suspension.k_springFL = 67500;
@@ -89,7 +101,7 @@ road.z_r = timeseries(road.z_r_data,road.z_r_time);
 % Edit Surface Timeseries
 % Add a step_z m step bump @ step_t s;
 for i = 1:length(road.z_r.time)
-    road.step_z = 0.1;
+    road.step_z = 0.0;
     road.step_t = 1;
     if road.z_r.time(i) >= road.step_t
         road.z_r.data(i) = road.step_z;
@@ -115,8 +127,10 @@ simout = sim('DOF7_model.slx',simulation_time);
 %% Run FFT
 dt = 5e-3;
 [fft.amp_s,fft.phase_s,fft.freq_s] = fft_VD(simout.gVert.data,dt);
-[fft.amp_usF,fft.phase_usF,fft.freq_usF] = fft_VD(simout.gVertHubFL.data,dt);
-[fft.amp_usR,fft.phase_usR,fft.freq_usR] = fft_VD(simout.gVertHubRL.data,dt);
+[fft.amp_usFL,fft.phase_usFL,fft.freq_usFL] = fft_VD(simout.gVertHubFL.data,dt);
+[fft.amp_usFR,fft.phase_usFR,fft.freq_usFR] = fft_VD(simout.gVertHubFR.data,dt);
+[fft.amp_usRL,fft.phase_usRL,fft.freq_usRL] = fft_VD(simout.gVertHubRL.data,dt);
+[fft.amp_usRR,fft.phase_usRR,fft.freq_usRR] = fft_VD(simout.gVertHubRR.data,dt);
 
 %% Post Simulation Results
 % Ride Frequency Front Left [Hz]
@@ -178,21 +192,26 @@ plot(simout.FTyreRR,'g--','LineWidth',1.5,'DisplayName','FTyreRR')
 title('Tyre Forces')
 xlabel('Time [s]')
 ylabel('Tyre Force [N]')
+ylim([-5e4 5e4])
 lgd = legend;
 grid on
-ylim([-5e4 5e4])
+
 subplot(3,2,3)
-plot(simout.vzCar,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
+plot(simout.vzCar,'r','LineWidth',1.5,'DisplayName','vzCar')
 hold on
-plot(simout.vHubFL,'b','LineWidth',1.5,'DisplayName','Front Unsprung Mass')
+plot(simout.vHubFL,'b','LineWidth',1.5,'DisplayName','vHubFL')
 hold on
-plot(simout.vHubRL,'g','LineWidth',1.5,'DisplayName','Rear Unsprung Mass')
+plot(simout.vHubFR,'b--','LineWidth',1.5,'DisplayName','vHubFR')
+hold on
+plot(simout.vHubRL,'g','LineWidth',1.5,'DisplayName','vHubRL')
+hold on
+plot(simout.vHubRR,'g--','LineWidth',1.5,'DisplayName','vHubRR')
 title('Sprung and Unsprung Masses Vertical Velocities')
 xlabel('Time [s]')
 ylabel('Vertical Velocity [m/s]')
+ylim([-10 10])
 lgd = legend;
 grid on
-ylim([-10 10])
 
 subplot(3,2,4)
 plot(simout.FSpringFL,'b','LineWidth',1.5,'DisplayName','FSpringFL')
@@ -205,9 +224,9 @@ plot(simout.FSpringRR,'g--','LineWidth',1.5,'DisplayName','FSpringRR')
 title('Spring Forces')
 xlabel('Time [s]')
 ylabel('Spring Force [N]')
+ylim([-1e4 1e4])
 lgd = legend;
 grid on
-ylim([-1e4 1e4])
 
 subplot(3,2,5)
 plot(simout.gVert,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
@@ -222,9 +241,9 @@ plot(simout.gVertHubRR,'g--','LineWidth',1.5,'DisplayName','gVertHubRR')
 title('Sprung and Unsprung Masses Vertical Accelerations')
 xlabel('Time [s]')
 ylabel('Vertical Acceleration [m/s^2]')
+ylim([-1.5e3 1.5e3])
 lgd = legend;
 grid on
-ylim([-1.5e3 1.5e3])
 
 subplot(3,2,6)
 plot(simout.FDamperFL,'b','LineWidth',1.5,'DisplayName','FDamperFL')
@@ -236,23 +255,84 @@ hold on
 plot(simout.FDamperRR,'g--','LineWidth',1.5,'DisplayName','FDamperRR')
 title('Damper Forces')
 xlabel('Time [s]')
-ylabel('Damper force [N]')
+ylabel('Damper Force [N]')
+ylim([-1.5e4 1.5e4])
 lgd = legend;
 grid on
-ylim([-1.5e4 1.5e4])
 
-tab2 = uitab("Title","FFT");
+tab2 = uitab("Title","Aero Forces");
 axes(tab2)
+subplot(2,1,1)
+plot(simout.vCar.data,simout.FSpringFL.data,'b','LineWidth',1.5,'DisplayName','FSpringFL')
+hold on
+plot(simout.vCar.data,simout.FSpringFR.data,'b--','LineWidth',1.5,'DisplayName','FSpringFR')
+hold on
+plot(simout.vCar.data,simout.FSpringRL.data,'g','LineWidth',1.5,'DisplayName','FSpringRL')
+hold on
+plot(simout.vCar.data,simout.FSpringRR.data,'g--','LineWidth',1.5,'DisplayName','FSpringRR')
+title('Spring Forces')
+xlabel('vCar [m/s]')
+ylabel('Spring Force [N]')
+xlim([0 28])
+ylim([1500 2500])
+lgd = legend;
+grid on
+
+subplot(2,1,2)
+plot(simout.vCar.data,simout.FzAeroF.data,'b','LineWidth',1.5,'DisplayName','FzAeroF')
+hold on
+plot(simout.vCar.data,simout.FzAeroR.data,'g','LineWidth',1.5,'DisplayName','FzAeroR')
+hold on
+plot(simout.vCar.data,simout.FzAeroTotal.data,'r','LineWidth',1.5,'DisplayName','FzAeroTotal')
+title('Aero Forces')
+xlabel('vCar [m/s]')
+ylabel('Downforce [N]')
+xlim([0 28])
+ylim([0 1000])
+lgd = legend;
+grid on
+
+tab3 = uitab("Title","Lateral Load Transfer");
+axes(tab3)
+subplot(3,1,1)
+plot(simout.FSpringFL,'b','LineWidth',1.5,'DisplayName','FSpringFL')
+hold on
+plot(simout.FSpringFR,'b--','LineWidth',1.5,'DisplayName','FSpringFR')
+hold on
+plot(simout.FSpringRL,'g','LineWidth',1.5,'DisplayName','FSpringRL')
+hold on
+plot(simout.FSpringRR,'g--','LineWidth',1.5,'DisplayName','FSpringRR')
+title('Spring Forces')
+xlabel('Time [s]')
+ylabel('Spring Force [N]')
+ylim([1500 2500])
+lgd = legend;
+grid on
+
+subplot(2,1,2)
+plot(simout.gLat,'r','LineWidth',1.5,'DisplayName','Lateral Acceleration')
+title('Lateral Acceleration')
+xlabel('Time [s]')
+ylabel('Lateral Acceleration [m/s^2]')
+ylim([0 4])
+lgd = legend;
+grid on
+
+tab4 = uitab("Title","FFT");
+axes(tab4)
 subplot(1,1,1)
 plot(fft.freq_s,fft.amp_s,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
 hold on
-plot(fft.freq_usF,fft.amp_usF,'b','LineWidth',1.5,'DisplayName','Unsprung Mass Front')
-plot(fft.freq_usR,fft.amp_usR,'g','LineWidth',1.5,'DisplayName','Unsprung Mass Rear')
-title('Sprung Mass Vertical Acceleration')
+plot(fft.freq_usFL,fft.amp_usFL,'b','LineWidth',1.5,'DisplayName','FL')
+hold on
+plot(fft.freq_usFR,fft.amp_usFR,'b--','LineWidth',1.5,'DisplayName','FR')
+hold on
+plot(fft.freq_usRL,fft.amp_usRL,'g','LineWidth',1.5,'DisplayName','RL')
+hold on
+plot(fft.freq_usRL,fft.amp_usRR,'g--','LineWidth',1.5,'DisplayName','RR')
+title('Mass Vertical Acceleration')
 xlabel('Frequency [Hz]')
 ylabel('Vertical Acceleration [m/s^2]')
 lgd = legend;
-xlim([ 0 50])
+xlim([0 50])
 grid on
-
-% fprintf('z_us_dotdot = %f /n',z_us_dotdot.data(1))
