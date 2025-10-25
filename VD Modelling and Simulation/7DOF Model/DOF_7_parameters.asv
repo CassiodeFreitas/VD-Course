@@ -36,12 +36,12 @@ r = 0.375;
 chassis.hrcF = 0.04;
 chassis.hrcR = 0.06;
 chassis.hrcCoG = (chassis.hrcF + chassis.hrcR)/2;
-chassis.hrcusF = r;
-chassis.hrcusR = r;
+chassis.hrcusF = r/2;
+chassis.hrcusR = r/2;
 % Constant Velocity [m/s]
 chassis.V = 20;
 % Constant Lateral Acceleration [m/s^2]
-chassis.ay = 4;
+chassis.ay = 2; %2;
 
 %% Suspension Parameters
 % Spring Stiffness [N/m] (f_rideF = 3.00 Hz & f_rideR = 3.60 Hz)
@@ -214,26 +214,19 @@ plot(simout.gVert,'r','LineWidth',1.5,'DisplayName','Sprung Mass')
 hold on
 plot(simout.gVertHubFL,'b','LineWidth',1.5,'DisplayName','gVertHubFL')
 hold on
-plot(simout.gVertHubFR,'b--','LineWidth',1.5,'DisplayName','gVertHubFR')
+plot(simout.gVertHubFL,'b','LineWidth',1.5,'DisplayName','Front Unsprung Mass')
 hold on
-plot(simout.gVertHubRL,'g','LineWidth',1.5,'DisplayName','gVertHubRL')
-hold on
-plot(simout.gVertHubRR,'g--','LineWidth',1.5,'DisplayName','gVertHubRR')
+plot(simout.gVertHubRL,'g','LineWidth',1.5,'DisplayName','Rear Unsprung Mass')
 title('Sprung and Unsprung Masses Vertical Accelerations')
 xlabel('Time [s]')
 ylabel('Vertical Acceleration [m/s^2]')
 lgd = legend;
 grid on
 ylim([-1.5e3 1.5e3])
-
 subplot(3,2,6)
-plot(simout.FDamperFL,'b','LineWidth',1.5,'DisplayName','FDamperFL')
+plot(simout.FDamperFL,'b','LineWidth',1.5,'DisplayName','Front Damper')
 hold on
-plot(simout.FDamperFR,'b--','LineWidth',1.5,'DisplayName','FDamperFR')
-hold on
-plot(simout.FDamperRL,'g','LineWidth',1.5,'DisplayName','FDamperRL')
-hold on
-plot(simout.FDamperRR,'g--','LineWidth',1.5,'DisplayName','FDamperRR')
+plot(simout.FDamperRL,'g','LineWidth',1.5,'DisplayName','Rear Damper')
 title('Damper Forces')
 xlabel('Time [s]')
 ylabel('Damper force [N]')
