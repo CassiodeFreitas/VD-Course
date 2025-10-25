@@ -182,13 +182,13 @@ lgd = legend;
 grid on
 
 subplot(3,2,2)
-plot(simout.FTyreFL,'b','LineWidth',1.5,'DisplayName','FTyreFL')
+plot(simout.FzTyreFL,'b','LineWidth',1.5,'DisplayName','FzTyreFL')
 hold on
-plot(simout.FTyreFR,'b--','LineWidth',1.5,'DisplayName','FTyreFR')
+plot(simout.FzTyreFR,'b--','LineWidth',1.5,'DisplayName','FzTyreFR')
 hold on
-plot(simout.FTyreRL,'g','LineWidth',1.5,'DisplayName','FTyreRL')
+plot(simout.FzTyreRL,'g','LineWidth',1.5,'DisplayName','FzTyreRL')
 hold on
-plot(simout.FTyreRR,'g--','LineWidth',1.5,'DisplayName','FTyreRR')
+plot(simout.FzTyreRR,'g--','LineWidth',1.5,'DisplayName','FzTyreRR')
 title('Tyre Forces')
 xlabel('Time [s]')
 ylabel('Tyre Force [N]')

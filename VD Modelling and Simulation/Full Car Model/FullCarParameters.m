@@ -96,7 +96,7 @@ aero.Af = 1.25;
 % Drag Coefficient [-]
 aero.Cx = 0;
 % Downforce Coefficient [-]
-aero.Cz = 1;
+aero.Cz = 0;
 % Air Density [kg/m^3]
 aero.rho = 1.225;
 % Aero Balance
