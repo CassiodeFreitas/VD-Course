@@ -5,19 +5,19 @@
 % Pitch OK
 % Yaw OK
 % zFL OK
-% zFR OK
-% zRL OK
-% zRR OK
-% aSteer OK
-% Engine Model NOK
-% Brake Model NOK
-% Wheel Rotational Speeds NOK
-% Circuit Model (xyz) NOK
-% Driver Model WIP
-% Ackerman geometry NOK
-% Toe Alignment NOK
-% Pacejka Lateral Tyre Model OK
-% Pacejka Longitudinal Tyre Model NOK
+% zFR
+% zRL
+% zRR
+% aSteer
+% Engine Model
+% Brake Model
+% Wheel Rotational Speeds
+% Circuit Model (xyz)
+% Driver Model
+% Ackerman geometry
+% Toe Alignment
+% Pacejka Lateral Tyre Model
+% Pacejka Longitudinal Tyre Model
 
 clc
 clear all
